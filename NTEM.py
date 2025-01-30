@@ -6,11 +6,7 @@
 ██║╚██╗██║   ██║   ██╔══╝  
 ██║ ╚████║   ██║   ███████╗
 ╚═╝  ╚═══╝   ╚═╝   ╚══════╝ v0.1
-
-Welcome to NTE! A project designed for an easy, quick and reliable way to create custom TUIs for my other projects.
-This file's task is to setup the variables that the TUI will use to create the interface.
-
-NTE works ONLY on Windows because of msvcrt, which is needed for key input. Compatibility for Unix-like systems will be added much later.
+by @Zhyov on GitHub
 
 '''
 
@@ -101,7 +97,9 @@ def handlePanelUpdate(file : str):
     dir2 = f'{directory}\data\{fileName}\panels\{file}\{file}Manage.json'
     data = json.load(open(dir2))
     oldOptions = data["options"]
+    oldFunctions = data["functions"]
     addOptions = []
+    addFunctions = []
     panelCount = 0
     for panel in [x[2] for x in os.walk(dir1)][0]:
         panelData = json.load(open(f'{dir1}\{panel}'))
@@ -110,10 +108,15 @@ def handlePanelUpdate(file : str):
         for option in oldOptions:
             if option != f'{panelData["name"]} ({panel[:-5]})' and added == False:
                 addOptions.append(f'{panelData["name"]} ({panel[:-5]})')
+                addFunctions.append(None)
                 added = True
     if panelCount > 0:
-        return
+        for option in oldOptions:
+            if option == "(Create root panel)":
+                data["functions"][data["options"].index("(Create root panel)")] = f"goto {file}\{file}Create"
+                data["options"][data["options"].index("(Create root panel)")] = "(Create panel)"
     data["options"] = addOptions + oldOptions
+    data["functions"] = addFunctions + oldFunctions
     json.dump(data, open(dir2, 'w'))
     json.load(open(f'{directory}\data\{file}\Settings.json'))["panels"] = panelCount
     json.dump(json.load(open(f'{directory}\data\{file}\Settings.json')), open(f'{directory}\data\{file}\Settings.json', 'w'))
