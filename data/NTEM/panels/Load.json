@@ -1,0 +1,7 @@
+{
+    "name": "Load NTE",
+    "type": "input",
+    "texts": ["Type the name of the NTE you want to manage."],
+    "input": "> ",
+    "command": "goto" 
+}

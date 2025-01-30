@@ -1,0 +1,7 @@
+{
+    "name": "Create NTE",
+    "type": "input",
+    "texts": ["What will you name your TUI?"],
+    "input": "> ",
+    "command": "createNTE" 
+}

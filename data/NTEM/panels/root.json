@@ -1,0 +1,6 @@
+{
+    "name": "Menu",
+    "type": "option",
+    "options": ["Create NTE", "Load NTE", "Exit"],
+    "functions": ["goto Create", "goto Load", "exit"]
+}
