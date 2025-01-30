@@ -10,6 +10,8 @@ For ease of use, the NTE Manager (NTEM) file exists which makes the process of b
 
 ## How to use
 
+`NOTE: If you want to manually build your NTE instead of using NTEM, read the MANUAL file.`
+
 To get started, open the NTEM file and select the "Create NTE" option.
 <img src="images/step-one.png" alt="Step 1" width="1000"/>
 

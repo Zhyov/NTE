@@ -38,7 +38,7 @@ styles = [['║', '═', '╔', '╗', '╚', '╝', '╠', '╣'], ['│', '─
 
 # [[ JSON variables ]]
 directory = f'{__file__[:(-len(os.path.basename(__file__))-1)]}'
-settings = json.load(open(f'{directory}\data\{fileName}\Settings.json'))
+settings = json.load(open(f'{directory}\data\{fileName}\Settings.ntec'))
 
 # [[[ Settings ]]]
 title = settings["title"]
@@ -94,7 +94,7 @@ def handleStyle(type : int):
 
 def handlePanelUpdate(file : str):
     dir1 = f'{directory}\data\{file}\panels'
-    dir2 = f'{directory}\data\{fileName}\panels\{file}\{file}Manage.json'
+    dir2 = f'{directory}\data\{fileName}\panels\{file}\{file}Manage.nteo'
     data = json.load(open(dir2))
     oldOptions = data["options"]
     oldFunctions = data["functions"]
@@ -110,7 +110,7 @@ def handlePanelUpdate(file : str):
         for option in oldOptions:
             if option != f'{panelData["name"]} ({panel[:-5]})' and added == False:
                 addOptions.append(f'{panelData["name"]} ({panel[:-5]})')
-                addFunctions.append(None)
+                addFunctions.append(f'goto {file}\{panel[:-5]}Manage')
                 addDescriptions.append(f"Manage selected panel")
                 added = True
     if panelCount > 0:
@@ -123,20 +123,20 @@ def handlePanelUpdate(file : str):
     data["functions"] = addFunctions + oldFunctions
     data["descriptions"] = addDescriptions + oldDescriptions
     json.dump(data, open(dir2, 'w'))
-    json.load(open(f'{directory}\data\{file}\Settings.json'))["panels"] = panelCount
-    json.dump(json.load(open(f'{directory}\data\{file}\Settings.json')), open(f'{directory}\data\{file}\Settings.json', 'w'))
+    json.load(open(f'{directory}\data\{file}\Settings.ntec'))["panels"] = panelCount
+    json.dump(json.load(open(f'{directory}\data\{file}\Settings.ntec')), open(f'{directory}\data\{file}\Settings.ntec', 'w'))
 
 def handlePanelCreation(dir : str, fileName : str, name : str, type : str, texts : list = None, inputString : str = None, command : str = None, options : list = None, functions : list = None, descriptions : list = None):
-    if type != "settings": open(f'{dir}\{fileName}.json', 'wb').close()
+    if type != "settings": open(f'{dir}\{fileName}.nteo', 'wb').close()
     if type == "option":
-        json.dump({"name": name, "type": "option", "options": options, "functions": functions, "descriptions": descriptions}, open(f'{dir}\{fileName}.json', 'w'))
+        json.dump({"name": name, "type": "option", "options": options, "functions": functions, "descriptions": descriptions}, open(f'{dir}\{fileName}.nteo', 'w'))
     elif type == "text":
-        json.dump({"name": name, "type": "text", "texts": texts, "functions": functions, "options": options, "descriptions": descriptions}, open(f'{dir}\{fileName}.json', 'w'))
+        json.dump({"name": name, "type": "text", "texts": texts, "functions": functions, "options": options, "descriptions": descriptions}, open(f'{dir}\{fileName}.nteo', 'w'))
     elif type == "input":
-        json.dump({"name": name, "type": "input", "texts": texts, "input": inputString, "command": command}, open(f'{dir}\{fileName}.json', 'w'))
+        json.dump({"name": name, "type": "input", "texts": texts, "input": inputString, "command": command}, open(f'{dir}\{fileName}.nteo', 'w'))
     elif type == "settings":
-        open(f'{dir}\Settings.json', 'wb').close()
-        json.dump({"title": name, "panels": 0}, open(f'{dir}\Settings.json', 'w'))
+        open(f'{dir}\Settings.ntec', 'wb').close()
+        json.dump({"title": name, "panels": 0}, open(f'{dir}\Settings.ntec', 'w'))
 
 def handleCommand(command : str, inputReceived : str):
     global current
@@ -169,15 +169,15 @@ def handleEnter(functions : str):
             if message[0] == "goto":
                 build(message[1])
             elif message[0] == "change":
-                data = json.load(open(f'{directory}\data\{message[1]}\{message[2]}.json'))
+                data = json.load(open(f'{directory}\data\{message[1]}\{message[2]}.nteo'))
                 data[message[3]] = message[4]
-                json.dump(data, open(f'{directory}\data\{message[1]}\{message[2]}.json', 'w'))
+                json.dump(data, open(f'{directory}\data\{message[1]}\{message[2]}.nteo', 'w'))
             elif message[0] == "add":
-                data = json.load(open(f'{directory}\data\{message[1]}\{message[2]}.json'))
+                data = json.load(open(f'{directory}\data\{message[1]}\{message[2]}.nteo'))
                 data[message[3]].append(message[4])
-                json.dump(data, open(f'{directory}\data\{message[1]}\{message[2]}.json', 'w'))
+                json.dump(data, open(f'{directory}\data\{message[1]}\{message[2]}.nteo', 'w'))
             elif message[0] == "create":
-                location = f'{directory}\data\{message[1]}\panels\{message[2]}.json'
+                location = f'{directory}\data\{message[1]}\panels\{message[2]}.nteo'
                 open(location, 'wb').close()
                 json.dump({"title": f"{message[2]}"}, open(location, 'w'))
             elif message[0] == "delete":
@@ -320,7 +320,7 @@ def buildOption(top : str, bottom : str, options : list, functions : list, descr
 
 def build(load : str):
     try:
-        panel = json.load(open(f'{directory}\data\{fileName}\panels\{load}.json'))
+        panel = json.load(open(f'{directory}\data\{fileName}\panels\{load}.nteo'))
         load = panel["name"]
         if panel["type"] == "option":
             buildOption(title, load, panel["options"], panel["functions"], panel["descriptions"])
