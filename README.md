@@ -4,7 +4,7 @@
 
 NTE stands for Nox Terminal Environment, a TUI (Text User Interface) loader and builder.
 
-It works by handling each section as a JSON file, having properties that define it. This is then loaded and displayed on a python file.
+It works by handling each section as an object file, having properties that define it. This is then loaded and displayed on a python file.
 
 For ease of use, the NTE Manager (NTEM) file exists which makes the process of building your own TUI much easier with its own interactive TUI. (Fun fact: Its functions are entirely created using NTE)
 
