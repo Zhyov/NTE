@@ -1,4 +1,4 @@
-# <img src="images/nte.png" alt="Logo" width="25"/> NTE
+# <img src="images/logo.png" alt="Logo" width="25"/> NTE
 
 ## About
 
@@ -13,12 +13,12 @@ For ease of use, the NTE Manager (NTEM) file exists which makes the process of b
 `NOTE: If you want to manually build your NTE instead of using NTEM, read the MANUAL file.`
 
 To get started, open the NTEM file and select the "Create NTE" option.
-<img src="images/step-one.png" alt="Step 1" width="1000"/>
+<img src="images/step1.png" alt="Step 1" width="1000"/>
 
 You will be asked to write the name of your TUI and after finishing, a "Manage" section will pop up where you can start adding elements to your TUI.
-<img src="images/step-two.png" alt="Step 2" width="1000"/>
+<img src="images/step2.png" alt="Step 2" width="1000"/>
 
 The heart of your TUI lies on its "root" panel, the one that will appear once you load it. Selecting the option will ask you to give a name to the panel. After being done, you will see the panel listed on the "Manage" section in the format "custom-name (file-name)."
-<img src="images/step-three.png" alt="Step 3" width="1000"/>
+<img src="images/step3.png" alt="Step 3" width="1000"/>
 
 With your root panel created, you will now be shown the panel whenever you load the TUI. Though, it will be empty as we have not added any option or text. To edit it, you just enter the panel you want to modify and you will see a variety of options which will let you change the main aspects of the panel.
