@@ -2,5 +2,6 @@
     "name": "Menu",
     "type": "option",
     "options": ["Create NTE", "Load NTE", "Exit"],
-    "functions": ["goto Create", "goto Load", "exit"]
+    "functions": ["goto Create", "goto Load", "exit"],
+    "descriptions": ["Create and manage a new NTE", "Manage a pre-existing NTE", ""]
 }

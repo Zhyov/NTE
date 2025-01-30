@@ -98,8 +98,10 @@ def handlePanelUpdate(file : str):
     data = json.load(open(dir2))
     oldOptions = data["options"]
     oldFunctions = data["functions"]
+    oldDescriptions = data["descriptions"]
     addOptions = []
     addFunctions = []
+    addDescriptions = []
     panelCount = 0
     for panel in [x[2] for x in os.walk(dir1)][0]:
         panelData = json.load(open(f'{dir1}\{panel}'))
@@ -109,24 +111,27 @@ def handlePanelUpdate(file : str):
             if option != f'{panelData["name"]} ({panel[:-5]})' and added == False:
                 addOptions.append(f'{panelData["name"]} ({panel[:-5]})')
                 addFunctions.append(None)
+                addDescriptions.append(f"Manage selected panel")
                 added = True
     if panelCount > 0:
         for option in oldOptions:
             if option == "(Create root panel)":
                 data["functions"][data["options"].index("(Create root panel)")] = f"goto {file}\{file}Create"
+                data["descriptions"][data["options"].index("(Create root panel)")] = f"Create a non-root panel"
                 data["options"][data["options"].index("(Create root panel)")] = "(Create panel)"
     data["options"] = addOptions + oldOptions
     data["functions"] = addFunctions + oldFunctions
+    data["descriptions"] = addDescriptions + oldDescriptions
     json.dump(data, open(dir2, 'w'))
     json.load(open(f'{directory}\data\{file}\Settings.json'))["panels"] = panelCount
     json.dump(json.load(open(f'{directory}\data\{file}\Settings.json')), open(f'{directory}\data\{file}\Settings.json', 'w'))
 
-def handlePanelCreation(dir : str, fileName : str, name : str, type : str, texts : list = None, inputString : str = None, command : str = None, options : list = None, functions : list = None):
+def handlePanelCreation(dir : str, fileName : str, name : str, type : str, texts : list = None, inputString : str = None, command : str = None, options : list = None, functions : list = None, descriptions : list = None):
     if type != "settings": open(f'{dir}\{fileName}.json', 'wb').close()
     if type == "option":
-        json.dump({"name": name, "type": "option", "options": options, "functions": functions}, open(f'{dir}\{fileName}.json', 'w'))
+        json.dump({"name": name, "type": "option", "options": options, "functions": functions, "descriptions": descriptions}, open(f'{dir}\{fileName}.json', 'w'))
     elif type == "text":
-        json.dump({"name": name, "type": "text", "texts": texts, "functions": functions, "options": options}, open(f'{dir}\{fileName}.json', 'w'))
+        json.dump({"name": name, "type": "text", "texts": texts, "functions": functions, "options": options, "descriptions": descriptions}, open(f'{dir}\{fileName}.json', 'w'))
     elif type == "input":
         json.dump({"name": name, "type": "input", "texts": texts, "input": inputString, "command": command}, open(f'{dir}\{fileName}.json', 'w'))
     elif type == "settings":
@@ -143,7 +148,7 @@ def handleCommand(command : str, inputReceived : str):
         os.system(f'mkdir {directory}\data\{inputReceived}')
         os.system(f'mkdir {directory}\data\{inputReceived}\panels')
         os.system(f'mkdir {directory}\data\{fileName}\panels\{inputReceived}')
-        handlePanelCreation(f'{directory}\data\{fileName}\panels\{inputReceived}', f"{inputReceived}Manage", f"Manage {inputReceived}", "option", None, None, None, ["(Create root panel)", "(Delete)", "Back"], [f"goto {inputReceived}\{inputReceived}Root", f"delete {fileName} {inputReceived}", "goto root"])
+        handlePanelCreation(f'{directory}\data\{fileName}\panels\{inputReceived}', f"{inputReceived}Manage", f"Manage {inputReceived}", "option", None, None, None, ["(Create root panel)", "(Delete)", "Back"], [f"goto {inputReceived}\{inputReceived}Root", f"delete {fileName} {inputReceived}", "goto root"], ["Create the panel that will always appear at the start", "Delete the NTE", "Go back to previous panel"])
         handlePanelCreation(f'{directory}\data\{fileName}\panels\{inputReceived}', f"{inputReceived}Root", f"Main {inputReceived} Panel", "input", [f"What will you name {inputReceived}'s main panel?"], "> ", f"createRoot {inputReceived}")
         handlePanelCreation(f'{directory}\data\{inputReceived}', None, inputReceived, "settings")
         handlePanelUpdate(inputReceived)
@@ -246,7 +251,7 @@ def buildInput(top : str, bottom : str, texts : list, inputString : str, command
         os.system('cls')
         buildInput(top, bottom, texts, inputString, command, typed)
 
-def buildText(top : str, bottom : str, texts : list, functions : list, options : list = None):
+def buildText(top : str, bottom : str, texts : list, functions : list, options : list = None, descriptions : list = None):
     global width, length, resizeFlag
     counter = 0
     chunkCounter = 0
@@ -255,7 +260,7 @@ def buildText(top : str, bottom : str, texts : list, functions : list, options :
     if resizeFlag:
         resizeFlag = False
         os.system('cls')
-        buildText(top, bottom, texts, functions, options)
+        buildText(top, bottom, texts, functions, options, descriptions)
     for text in texts:
         index = texts.index(text)
         if len(text) > width - 5:
@@ -269,50 +274,58 @@ def buildText(top : str, bottom : str, texts : list, functions : list, options :
             counter += 1
         buildBorders(['continue', 'title'], ' ')
     if options:
+        extra = 5
+        if not descriptions: extra = 6
         for option in options:
             index = options.index(option)
             buildBorders(['option', 'continue'], f'{handleOption('start', index + 1)}{options[index]}{' ' * (width - len(options[index]) - 5)}{handleOption('end', index + 1)}')
-        for _ in range(length - (counter * 2) - chunkCounter - len(options) - 7):
+        for _ in range(length - (counter * 2) - chunkCounter - len(options) - extra):
             buildBorders(['continue', 'title'], ' ')
     else:
-        for _ in range(length - (counter * 2) - chunkCounter - 7):
+        extra = 8
+        if not descriptions: extra = 7
+        for _ in range(length - (counter * 2) - chunkCounter - extra):
             buildBorders(['continue', 'title'], ' ')
+    if descriptions: buildBorders(['option', 'continue'], f' {descriptions[current - 1]}{' ' * (width - len(descriptions[current - 1]) - 5)} ')
     buildBorders(['continue', 'finish'])
     if options:
         fetchKeys(options, functions)
-        buildText(top, bottom, texts, functions, options)
+        buildText(top, bottom, texts, functions, options, descriptions)
         os.system('cls')
     else:
         fetchKeys(None)
         os.system('cls')
-        buildText(top, bottom, texts)
+        buildText(top, bottom, texts, descriptions)
 
-def buildOption(top : str, bottom : str, options : list, functions : list):
+def buildOption(top : str, bottom : str, options : list, functions : list, descriptions : list = None):
     global width, length, resizeFlag
     buildBorders(['title'], top)
     buildBorders(['title', 'merge', 'finish'], bottom)
     for option in options:
         index = options.index(option)
         buildBorders(['option', 'continue'], f'{handleOption('start', index + 1)}{options[index]}{' ' * (width - len(options[index]) - 5)}{handleOption('end', index + 1)}')
-    for _ in range(length - len(options) - 7):
+    extra = 8
+    if not descriptions: extra = 7
+    for _ in range(length - len(options) - extra):
         buildBorders(['continue', 'title'], ' ')
+    if descriptions: buildBorders(['option', 'continue'], f' {descriptions[current - 1]}{' ' * (width - len(descriptions[current - 1]) - 5)} ')
     buildBorders(['continue', 'finish'])
     if resizeFlag:
         resizeFlag = False
         os.system('cls')
-        buildOption(top, bottom, options, functions)
+        buildOption(top, bottom, options, functions, descriptions)
     fetchKeys(options, functions)
     os.system('cls')
-    buildOption(top, bottom, options, functions)
+    buildOption(top, bottom, options, functions, descriptions)
 
 def build(load : str):
     try:
         panel = json.load(open(f'{directory}\data\{fileName}\panels\{load}.json'))
         load = panel["name"]
         if panel["type"] == "option":
-            buildOption(title, load, panel["options"], panel["functions"])
+            buildOption(title, load, panel["options"], panel["functions"], panel["descriptions"])
         elif panel["type"] == "text":
-            buildText(title, load, panel["texts"], panel["functions"], panel["options"])
+            buildText(title, load, panel["texts"], panel["functions"], panel["options"], panel["descriptions"])
         elif panel["type"] == "input":
             buildInput(title, load, panel["texts"], panel["input"], panel["command"], "")
     except FileNotFoundError:
