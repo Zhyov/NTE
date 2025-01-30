@@ -148,7 +148,7 @@ def handleCommand(command : str, inputReceived : str):
         os.system(f'mkdir {directory}\data\{inputReceived}')
         os.system(f'mkdir {directory}\data\{inputReceived}\panels')
         os.system(f'mkdir {directory}\data\{fileName}\panels\{inputReceived}')
-        handlePanelCreation(f'{directory}\data\{fileName}\panels\{inputReceived}', f"{inputReceived}Manage", f"Manage {inputReceived}", "option", None, None, None, ["(Create root panel)", "(Delete)", "Back"], [f"goto {inputReceived}\{inputReceived}Root", f"delete {fileName} {inputReceived}", "goto root"], ["Create the panel that will always appear at the start", "Delete the NTE", "Go back to previous panel"])
+        handlePanelCreation(f'{directory}\data\{fileName}\panels\{inputReceived}', f"{inputReceived}Manage", f"Manage {inputReceived}", "option", None, None, None, ["(Create root panel)", "(Delete)", "Back"], [f"goto {inputReceived}\{inputReceived}Root", f"delete all {fileName} {inputReceived}", "goto root"], ["Create the panel that will always appear at the start", "Delete the NTE", "Go back to previous panel"])
         handlePanelCreation(f'{directory}\data\{fileName}\panels\{inputReceived}', f"{inputReceived}Root", f"Main {inputReceived} Panel", "input", [f"What will you name {inputReceived}'s main panel?"], "> ", f"createRoot {inputReceived}")
         handlePanelCreation(f'{directory}\data\{inputReceived}', None, inputReceived, "settings")
         handlePanelUpdate(inputReceived)
@@ -181,10 +181,14 @@ def handleEnter(functions : str):
                 open(location, 'wb').close()
                 json.dump({"title": f"{message[2]}"}, open(location, 'w'))
             elif message[0] == "delete":
-                locationFile = f'{directory}\data\{message[1]}\panels\{message[2]}'
-                locationFolder = f'{directory}\data\{message[2]}'
-                os.system(f'rmdir {locationFile} /s /q')
-                os.system(f'rmdir {locationFolder} /s /q')
+                if message[1] == "file":
+                    locationFile = f'{directory}\data\{message[2]}\panels\{message[3]}.nteo'
+                    os.system(f'rm {locationFile} /f')
+                if message[1] == "all":
+                    locationFolder = f'{directory}\data\{message[3]}'
+                    os.system(f'rmdir {locationFolder} /s /q')
+                    locationFile = f'{directory}\data\{message[2]}\panels\{message[3]}'
+                    os.system(f'rmdir {locationFile} /s /q')
                 build("root")
             elif message[0] == "exit":
                 exit()

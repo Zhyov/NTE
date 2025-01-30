@@ -10,9 +10,9 @@ data
 └── Test
 ```
 
-Then, you have to set up our NTE's settings. To do that, create a file named "Settings.ntec" (.ntec is for NTE config files). This file should be formatted like a .json file.
+Then, you have to set up your NTE's settings. To do that, create a file named "Settings.ntec" (.ntec is for NTE config files). This file should be formatted like a .json file.
 
-Inside the "Settings.ntec" file, we will have to values: "title" and "panels." The only value we need to change is title, because panels will be automatically updated once it is loaded.
+Inside the "Settings.ntec" file, you will have to values: "title" and "panels." The only value you need to change is title, because panels will be automatically updated once it is loaded.
 
 #### Settings.ntec
 ```
@@ -83,7 +83,10 @@ As you may have noticed, .nteo files with an "options" value also have a "functi
 ### goto
 The "goto" command lets you move to any panel inside the "panels" folder by typing their name (without file extension)
 
-If you have another panel, and want to go to it from one of the options inside your root, you can just write this:
+#### Synopsis
+`goto <name>`
+
+If you have another panel, and you want to be able to go to it from one of the options inside your root, you can just write this:
 
 #### root.nteo
 ```
@@ -105,3 +108,35 @@ data
     │   └── Things.nteo
     └── Settings.ntec
 ```
+
+### delete
+The "delete" command lets you delete any part of the data folder.
+
+#### Synopsis
+`delete [file | all] <nte> <name>`
+
+If you have another panel, and you want it to be able to delete it from one of the options inside your root, you can just write this:
+
+#### root.nteo
+```
+{
+    "name": "Root",
+    "type": "option,
+    "options": ["Delete Things"],
+    "functions": ["delete file Test Things"],
+    "descriptions": ["Deletes the panel Things"]
+}
+```
+
+#### Folder
+```
+data
+└── Test
+    ├── panels
+    │   ├── root.nteo
+    │   └── Things.nteo
+    └── Settings.ntec
+```
+
+### exit
+The "exit" command just closes the window.
