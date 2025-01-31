@@ -46,7 +46,8 @@ The "name" value will be used as the header of the panel and the "type" value wi
     "name": "Root",
     "type": "option",
     "options": ["Option 1"],
-    "functions": [nil]
+    "functions": [nil],
+    "descriptions": ["Description 1"]
 }
 ```
 
@@ -60,7 +61,8 @@ The "name" value will be used as the header of the panel and the "type" value wi
     "type": "text",
     "texts": ["Text 1"],
     "options": ["Option 1"],
-    "functions": [nil]
+    "functions": [nil],
+    "descriptions": ["Description 1"]
 }
 ```
 
@@ -113,7 +115,7 @@ data
 The "delete" command lets you delete any part of the data folder.
 
 #### Synopsis
-`delete [file | all] <nte> <name>`
+`delete <file | all> <nte> <name>`
 
 If you have another panel, and you want it to be able to delete it from one of the options inside your root, you can just write this:
 
@@ -121,7 +123,7 @@ If you have another panel, and you want it to be able to delete it from one of t
 ```
 {
     "name": "Root",
-    "type": "option,
+    "type": "option",
     "options": ["Delete Things"],
     "functions": ["delete file Test Things"],
     "descriptions": ["Deletes the panel Things"]
