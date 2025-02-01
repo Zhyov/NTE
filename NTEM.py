@@ -119,6 +119,7 @@ def handlePanelUpdate(file : str):
                 data["functions"][data["options"].index("(Create root panel)")] = f"goto {file}\{file}Create"
                 data["descriptions"][data["options"].index("(Create root panel)")] = f"Create a non-root panel"
                 data["options"][data["options"].index("(Create root panel)")] = "(Create panel)"
+                handlePanelCreation(f'{directory}\data\{fileName}\panels\{file}', f"{file}Create", f"Create panel for {file}", "option", None, None, None, ["Back"], [f"goto {file}\{file}Manage"], ["Go back to previous panel"])
     data["options"] = addOptions + oldOptions
     data["functions"] = addFunctions + oldFunctions
     data["descriptions"] = addDescriptions + oldDescriptions
