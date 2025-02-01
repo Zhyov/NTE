@@ -1,1 +1,0 @@
-{"name": "Main Test Panel", "type": "input", "texts": ["What will you name Test's main panel?"], "input": "> ", "command": "createRoot Test"}

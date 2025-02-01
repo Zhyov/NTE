@@ -1,1 +1,0 @@
-{"name": "Create panel for Test", "type": "option", "options": ["Back"], "functions": ["goto Test\\TestManage"], "descriptions": ["Go back to previous panel"]}

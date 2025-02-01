@@ -1,1 +1,0 @@
-{"name": "Manage Test", "type": "option", "options": ["Main (root)", "(Create panel)", "(Delete)", "Back"], "functions": ["goto Test\\rootManage", "goto Test\\TestCreate", "delete all NTEM Test", "goto root"], "descriptions": ["Manage selected panel", "Create a non-root panel", "Delete the NTE", "Go back to previous panel"]}
